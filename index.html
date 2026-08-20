@@ -35,12 +35,14 @@
 
   /* header */
   header{position:sticky;top:0;z-index:100;background:rgba(12,11,9,.9);backdrop-filter:blur(10px);border-bottom:1px solid rgba(201,162,75,.16)}
-  .nav{max-width:1180px;margin:0 auto;padding:0 clamp(20px,4vw,32px);min-height:102px;display:flex;align-items:center;justify-content:space-between;gap:24px}
-  .nav img{height:112px;width:auto}
+  .nav{max-width:1180px;margin:0 auto;padding:0 clamp(20px,4vw,32px);min-height:96px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+  .nav-right{display:flex;align-items:center;gap:clamp(16px,2.5vw,28px);flex:none}
+  .nav-logo{display:block;flex:none}
+  .nav-logo img{height:100px;width:auto}
   .nav-links{display:flex;gap:clamp(20px,3vw,38px);font-size:13.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase}
-  .nav-links a{color:var(--dim)}
+  .nav-links a{color:var(--dim);white-space:nowrap}
   .nav-links a:hover{color:var(--gold-light)}
-  .nav-cta{flex:none;border:1px solid var(--gold);color:var(--gold-light);padding:12px 22px;font-size:13px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;transition:background .25s ease,color .25s ease}
+  .nav-cta{flex:none;border:1px solid var(--gold);color:var(--gold-light);padding:12px 22px;font-size:13px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;transition:background .25s ease,color .25s ease}
   .nav-cta:hover{background:var(--gold);color:#0c0b09}
   .menu-btn{display:none;background:none;border:1px solid var(--line);color:var(--gold-light);width:44px;height:44px;align-items:center;justify-content:center;cursor:pointer;font-size:18px;line-height:1}
 
@@ -93,7 +95,8 @@
   .work-meta span{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-dim)}
 
   /* why */
-  .photo-ph{position:relative;aspect-ratio:4/5;overflow:hidden;background-size:cover;background-position:center;background-image:radial-gradient(120% 140% at 15% 10%,rgba(201,162,75,.10),transparent 55%),repeating-linear-gradient(118deg,rgba(255,255,255,.035) 0 2px,transparent 2px 14px),repeating-linear-gradient(24deg,rgba(255,255,255,.025) 0 1px,transparent 1px 22px),linear-gradient(155deg,#5c4f38,#3a3226 60%,#241f16)}
+  .photo-ph{position:relative;aspect-ratio:4/5;overflow:hidden;background-size:cover;background-position:center;background-image:url('assets/technician.jpg');border:1px solid var(--line)}
+  .photo-ph.empty{background-image:radial-gradient(120% 140% at 15% 10%,rgba(201,162,75,.10),transparent 55%),repeating-linear-gradient(118deg,rgba(255,255,255,.035) 0 2px,transparent 2px 14px),repeating-linear-gradient(24deg,rgba(255,255,255,.025) 0 1px,transparent 1px 22px),linear-gradient(155deg,#5c4f38,#3a3226 60%,#241f16)}
   .photo-ph span{position:absolute;left:0;right:0;bottom:0;padding:12px 14px;font-family:ui-monospace,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-light);background:linear-gradient(0deg,rgba(0,0,0,.55),transparent)}
   .why-lead{font-family:'Cormorant Garamond',serif;font-size:20px;line-height:1.6;color:var(--cream);margin:20px 0 30px}
   .why-list{list-style:none;margin:0;padding:0;display:grid;gap:20px}
@@ -137,11 +140,11 @@
   .foot-links a:hover{color:var(--gold-light)}
   .foot-bottom{margin-top:36px;padding-top:26px;border-top:1px solid var(--line);display:flex;justify-content:space-between;font-size:11.5px;color:var(--gold-dim);letter-spacing:.04em;flex-wrap:wrap;gap:10px}
 
-  @media (max-width:860px){
+  @media (max-width:1040px){
     .nav-links{display:none}
-    .nav-links.open{display:flex;position:fixed;top:102px;left:0;right:0;background:var(--bg);flex-direction:column;padding:24px clamp(20px,4vw,32px);gap:22px;border-bottom:1px solid var(--line)}
+    .nav-links.open{display:flex;position:absolute;top:100%;left:0;right:0;background:var(--bg);flex-direction:column;padding:24px clamp(20px,4vw,32px);gap:22px;border-bottom:1px solid var(--line)}
     .menu-btn{display:flex}
-    .nav img{height:78px}
+    .nav-logo img{height:72px}
     .nav-cta{display:none}
   }
   @media (prefers-reduced-motion:reduce){*{transition-duration:.001ms !important}}
@@ -151,9 +154,6 @@
 
 <header>
   <div class="nav">
-    <a href="#top" aria-label="Menca Stone &amp; Restoration LLC home">
-      <img src="assets/menca-logo.png" alt="Menca Stone &amp; Restoration LLC">
-    </a>
     <nav class="nav-links" id="navLinks">
       <a href="#services">Services</a>
       <a href="#work">Our Work</a>
@@ -161,8 +161,13 @@
       <a href="#area">Service Area</a>
       <a href="#contact">Contact</a>
     </nav>
-    <a href="#contact" class="nav-cta">Request an Estimate</a>
     <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">☰</button>
+    <div class="nav-right">
+      <a href="#contact" class="nav-cta">Request an Estimate</a>
+      <a href="#top" class="nav-logo" aria-label="Menca Stone &amp; Restoration LLC home">
+        <img src="assets/menca-logo-mark.png" alt="Menca Stone &amp; Restoration LLC">
+      </a>
+    </div>
   </div>
 </header>
 
@@ -190,7 +195,7 @@
         <span class="ba-tag b">Before</span>
         <span class="ba-tag a">After</span>
         <div class="ba-handle"></div>
-        <span class="ba-cap">Polished &amp; sealed marble floor</span>
+        <span class="ba-cap">Marble island — honed, polished &amp; sealed</span>
       </div>
     </div>
   </section>
@@ -230,7 +235,7 @@
 
   <section id="why" class="tinted">
     <div class="wrap two-col">
-      <div class="photo-ph"><span>Add photo: technician at work</span></div>
+      <div class="photo-ph" role="img" aria-label="Menca technician polishing a marble countertop"></div>
       <div>
         <div class="eyebrow">Why Menca</div>
         <p class="why-lead">We restore the beauty of natural stone through hands-on restoration, polishing, repair, honing and refinishing — with the same level of care whether it's one countertop or a full commercial floor.</p>
@@ -364,14 +369,14 @@
    Leave them as '' to keep the stone-texture placeholder.                    */
 var JOBS = [
   {title:'Marble Floor Restoration',      tag:'Marble · Ramsey, NJ',            cap:'Etching removed, honed & polished',  before:'', after:''},
-  {title:'Kitchen Countertop Refinish',   tag:'Granite · Mahwah, NJ',           cap:'Deep scratches removed & resealed',  before:'', after:''},
+  {title:'Kitchen Countertop Refinish',   tag:'Marble · Bergen County, NJ',     cap:'Honed, polished & sealed',           before:'assets/counter-before.jpg', after:'assets/counter-after.jpg'},
   {title:'Outdoor Travertine Patio',      tag:'Travertine · Franklin Lakes, NJ',cap:'Filled, leveled & refinished',       before:'', after:''},
   {title:'Bathroom Vanity Restoration',   tag:'Marble · Allendale, NJ',         cap:'Chip repair & polish',               before:'', after:''},
   {title:'Commercial Lobby Floor',        tag:'Marble · Paramus, NJ',           cap:'Full strip, hone & polish',          before:'', after:''},
   {title:'Countertop Chip Repair',        tag:'Granite · Ridgewood, NJ',        cap:'Precision fill & blend',             before:'', after:''}
 ];
 /* Hero slider photos — same idea */
-var HERO = {before:'', after:''};
+var HERO = {before:'assets/counter-before.jpg', after:'assets/counter-after.jpg'};
 /* ---------------------------------------- */
 
 function initSlider(root){
