@@ -204,7 +204,7 @@ function pageView(path, title){
   .step h3{font-size:24px;margin:14px 0 12px}
   .step p{font-size:14.5px;line-height:1.7;color:var(--dim);margin:0;max-width:300px}
   .process-foot{margin-top:clamp(36px,4vw,52px);display:flex;flex-wrap:wrap;align-items:center;gap:18px 28px;font-size:14px;color:var(--dim)}
-  .text-link{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-light);border-bottom:1px solid var(--gold-dim);padding-bottom:4px}
+  .text-link{display:inline-block;white-space:nowrap;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-light);border-bottom:1px solid var(--gold-dim);padding-bottom:4px}
   .text-link:hover{border-color:var(--gold-light)}
 
   /* estimate form */
@@ -266,9 +266,15 @@ function pageView(path, title){
   .ty-photo{position:relative;aspect-ratio:4/5;background:#241f16 center/cover no-repeat;border:1px solid var(--line)}
   .ty-photo::before{content:'';position:absolute;inset:16px;border:1px solid rgba(232,208,147,.4);pointer-events:none}
   .ty-seal{position:absolute;left:32px;bottom:30px;font-size:10.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--cream);text-shadow:0 1px 12px rgba(0,0,0,.6)}
+  .ty-strip{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-top:10px}
+  .ty-strip button{aspect-ratio:1/1;padding:0;border:1px solid var(--line);background:#241f16 center/cover no-repeat;cursor:pointer;transition:border-color .2s}
+  .ty-strip button:hover{border-color:var(--gold-dim)}
+  .ty-strip button[aria-current="true"]{border-color:var(--gold)}
+  .ty-nophoto{aspect-ratio:4/5;border:1px solid var(--line);background:linear-gradient(160deg,#1c1812,#100e0a);display:grid;align-content:center;justify-items:start;gap:18px;padding:clamp(28px,4vw,52px)}
+  .ty-nophoto p{font-family:'Cormorant Garamond',serif;font-size:clamp(22px,2.4vw,28px);line-height:1.35;color:var(--cream);margin:0;max-width:340px}
   .ty-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
   .ty-steps li{background:var(--bg-alt);padding:40px 34px 38px}
-  .ty-num{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:56px;line-height:1;color:var(--gold-dim)}
+  .ty-num{display:block;font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:500;line-height:1;color:var(--gold-dim)}
   .ty-steps h3{font-size:23px;margin:22px 0 12px}
   .ty-steps p{font-size:14.5px;line-height:1.7;color:var(--dim);margin:0}
   .ty-cta{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:32px 60px;align-items:end}
@@ -503,14 +509,16 @@ function pageView(path, title){
           <div class="fs-legend" id="lg2"><i>02</i>The surface</div>
           <div class="row">
             <div class="fld">
-              <label for="fstone">Stone Type</label>
+              <label for="fstone">Stone Type <span class="opt">(optional)</span></label>
               <select id="fstone" name="stone">
+                <option value="">Select</option>
                 <option>Marble</option><option>Granite</option><option>Travertine</option><option>Quartzite</option><option>Limestone</option><option>Not sure</option><option>Other</option>
               </select>
             </div>
             <div class="fld">
-              <label for="fservice">Service Needed</label>
+              <label for="fservice">Service Needed <span class="opt">(optional)</span></label>
               <select id="fservice" name="service">
+                <option value="">Select</option>
                 <option>Restoration / Polishing</option><option>Honing / Refinishing</option><option>Crack / Chip Repair</option><option>Sealing</option><option>Stone Installation</option><option>Stone Fabrication</option><option>Not sure yet</option>
               </select>
             </div>
@@ -587,8 +595,16 @@ function pageView(path, title){
         <p class="lead">Your estimate request has reached the Menca team. We'll review the details and reply by email.</p>
         <div class="ty-sum" id="tySum" hidden></div>
       </div>
-      <div class="ty-photo" id="tyPhoto" role="img" aria-label="A marble countertop restored by Menca Stone &amp; Restoration">
-        <span class="ty-seal">Menca Stone &amp; Restoration</span>
+      <div>
+        <div id="tyGallery" hidden>
+          <div class="ty-photo" id="tyPhoto" role="img" aria-label="Photo you submitted"><span class="ty-seal">Your photos</span></div>
+          <div class="ty-strip" id="tyStrip" hidden></div>
+        </div>
+        <div class="ty-nophoto" id="tyNoPhoto" hidden>
+          <span class="cov-label">No photos attached</span>
+          <p>Photos help us understand the surface and give a more accurate estimate.</p>
+          <a href="mailto:mencastoneco@gmail.com" class="text-link" data-cta="email_photos">Email photos to us</a>
+        </div>
       </div>
     </div>
   </section>
@@ -603,9 +619,9 @@ function pageView(path, title){
         <p>No need to do anything else right now — we'll take it from here.</p>
       </div>
       <ol class="ty-steps">
-        <li><span class="ty-num">i.</span><h3>We review your request</h3><p>We look over your photos and notes to understand the stone, its condition and what you're hoping to achieve.</p></li>
-        <li><span class="ty-num">ii.</span><h3>We reach out</h3><p>We'll reply to the email address you provided with any questions and next steps.</p></li>
-        <li><span class="ty-num">iii.</span><h3>You get a clear estimate</h3><p>We walk you through the recommended process and cost so you can decide with confidence.</p></li>
+        <li><span class="ty-num">01</span><h3>We review your request</h3><p>We look over your photos and notes to understand the stone, its condition and what you're hoping to achieve.</p></li>
+        <li><span class="ty-num">02</span><h3>We reach out</h3><p>We'll reply to the email address you provided with any questions and next steps.</p></li>
+        <li><span class="ty-num">03</span><h3>You get a clear estimate</h3><p>We walk you through the recommended process and cost so you can decide with confidence.</p></li>
       </ol>
     </div>
   </section>
@@ -790,13 +806,42 @@ function fillThanks(){
   try{ d = JSON.parse(sessionStorage.getItem('menca_ty') || '{}'); }catch(e){}
   var sum = document.getElementById('tySum');
   sum.innerHTML = '';
-  var items = [];
-  if(d.service) items.push(d.service);
-  if(d.stone) items.push(d.stone);
+  var items = [d.service, d.stone, d.size, d.town].filter(Boolean);
   if(typeof d.photos === 'number') items.push(d.photos ? d.photos + (d.photos === 1 ? ' photo' : ' photos') + ' received' : 'No photos attached');
   items.forEach(function(t){ var s = document.createElement('span'); s.textContent = t; sum.appendChild(s); });
   sum.hidden = !items.length;
-  if(typeof HERO !== 'undefined' && HERO.after) document.getElementById('tyPhoto').style.backgroundImage = 'url("' + HERO.after + '")';
+
+  var thumbs = (window.__tyThumbs && window.__tyThumbs.length) ? window.__tyThumbs : (d.thumbs || []);
+  var gal = document.getElementById('tyGallery');
+  var none = document.getElementById('tyNoPhoto');
+  var main = document.getElementById('tyPhoto');
+  var strip = document.getElementById('tyStrip');
+  strip.innerHTML = '';
+  if(!thumbs.length){
+    gal.hidden = true;
+    none.hidden = false;
+    if(d.photos) none.querySelector('p').textContent = 'Your photos were sent with your request.';
+    return;
+  }
+  none.hidden = true;
+  gal.hidden = false;
+  function show(i){
+    main.style.backgroundImage = 'url("' + thumbs[i] + '")';
+    main.setAttribute('aria-label', 'Photo ' + (i + 1) + ' of ' + thumbs.length + ' you submitted');
+    Array.prototype.forEach.call(strip.children, function(b, j){ b.setAttribute('aria-current', j === i ? 'true' : 'false'); });
+  }
+  if(thumbs.length > 1){
+    thumbs.forEach(function(t, i){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.style.backgroundImage = 'url("' + t + '")';
+      b.setAttribute('aria-label', 'Show photo ' + (i + 1));
+      b.addEventListener('click', function(){ show(i); });
+      strip.appendChild(b);
+    });
+  }
+  strip.hidden = thumbs.length < 2;
+  show(0);
 }
 function render(initial){
   var t = isThanks();
@@ -913,6 +958,18 @@ if('IntersectionObserver' in window){
       }).catch(function(){ res(file); });
     });
   }
+  function makeThumb(file){
+    return new Promise(function(res){
+      if(!window.createImageBitmap) return res(null);
+      createImageBitmap(file).then(function(bmp){
+        var s = Math.min(1, 720 / Math.max(bmp.width, bmp.height));
+        var c = document.createElement('canvas');
+        c.width = Math.round(bmp.width * s); c.height = Math.round(bmp.height * s);
+        c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+        res(c.toDataURL('image/jpeg', 0.72));
+      }).catch(function(){ res(null); });
+    });
+  }
   function totalSize(){ return photos.reduce(function(s, p){ return s + p.file.size; }, 0); }
   function draw(){
     thumbs.innerHTML = '';
@@ -948,7 +1005,10 @@ if('IntersectionObserver' in window){
       var p = {file: f, busy: true};
       photos.push(p); added++; pending++;
       shrink(f).then(function(out){
-        p.file = out; p.busy = false; pending--;
+        p.file = out;
+        return makeThumb(out);
+      }).then(function(t){
+        p.thumb = t; p.busy = false; pending--;
         if(totalSize() > MAX_TOTAL){
           photos = photos.filter(function(q){ return q !== p; });
           showStatus('error', 'Those photos are too large to send together — try removing one or two.');
@@ -1009,8 +1069,12 @@ if('IntersectionObserver' in window){
     prog.hidden = !on;
     if(!on) prog.firstChild.style.width = '0';
   }
-  function remember(meta){
-    try{ sessionStorage.setItem('menca_ty', JSON.stringify({service: meta.service_type, stone: meta.stone_type, photos: meta.photo_count})); }catch(e){}
+  function remember(){
+    var d = {service: v('service'), stone: v('stone'), size: v('size'), town: v('location'), photos: photos.length};
+    var thumbs = photos.map(function(p){ return p.thumb; }).filter(Boolean);
+    window.__tyThumbs = thumbs;
+    try{ sessionStorage.setItem('menca_ty', JSON.stringify(Object.assign({thumbs: thumbs}, d))); }
+    catch(e){ try{ sessionStorage.setItem('menca_ty', JSON.stringify(d)); }catch(e2){} }
   }
 
   form.addEventListener('submit', function(e){
@@ -1021,8 +1085,8 @@ if('IntersectionObserver' in window){
     if(!validate()){ track('form_submit_error', {form_name: 'estimate', error_type: 'validation'}); return; }
 
     var meta = {
-      service_type: v('service'),
-      stone_type: v('stone'),
+      service_type: v('service') || 'not_specified',
+      stone_type: v('stone') || 'not_specified',
       project_size: v('size') || 'not_specified',
       referral_source: v('referral') || 'not_specified',
       photo_count: photos.length
@@ -1030,7 +1094,7 @@ if('IntersectionObserver' in window){
     track('form_submit', Object.assign({form_name: 'estimate'}, meta));
 
     /* spam protection: hidden honeypot + minimum fill time — bots get a silent fake success */
-    if(form.elements['_honey'].value || Date.now() - loadedAt < 3000){ remember(meta); goThanks(); return; }
+    if(form.elements['_honey'].value || Date.now() - loadedAt < 3000){ remember(); goThanks(); return; }
     var sent = +(sessionStorage.getItem('menca_sent') || 0);
     if(sent >= 5){ showStatus('error', "You've sent several requests already. For anything else, email us at", true); return; }
 
@@ -1038,20 +1102,54 @@ if('IntersectionObserver' in window){
     fd.append('Name', v('name'));
     fd.append('Town / City', v('location'));
     fd.append('Email', v('email'));
-    fd.append('Stone type', v('stone'));
-    fd.append('Service needed', v('service'));
+    fd.append('Stone type', v('stone') || 'Not specified');
+    fd.append('Service needed', v('service') || 'Not specified');
     fd.append('Project size', v('size') || '—');
     fd.append('Heard about us', v('referral') || '—');
     fd.append('Project description', v('details') || '—');
     fd.append('Photos attached', String(photos.length));
-    fd.append('_subject', 'New estimate request — ' + v('service') + ' — ' + v('location'));
+    fd.append('_subject', 'New estimate request — ' + (v('service') || 'Stone work') + ' — ' + v('location'));
     fd.append('_template', 'table');
     fd.append('_captcha', 'false');
     fd.append('_honey', '');
     fd.append('_replyto', v('email'));
     photos.forEach(function(p, i){ fd.append('attachment' + (i + 1), p.file, p.file.name); });
 
-    setLoading(true, photos.length ? 'Uploading photos…' : 'Sending…');
+    /* With photos: FormSubmit only delivers attachments through a classic
+       multipart form POST (its AJAX endpoint drops files). Build a real form,
+       put the optimized photos into file inputs, submit, and let FormSubmit
+       redirect back to /thank-you. */
+    if(photos.length && window.DataTransfer){
+      setLoading(true, 'Sending your photos…');
+      var next;
+      if(/^https?:$/.test(location.protocol) && /^\/(index\.html|thank-you\/?)?$/.test(location.pathname)) next = location.origin + '/thank-you';
+      else next = location.href.split('#')[0] + '#thank-you';
+      var pf = document.createElement('form');
+      pf.method = 'POST';
+      pf.action = CONFIG.formEndpoint.replace('/ajax/', '/');
+      pf.enctype = 'multipart/form-data';
+      pf.style.display = 'none';
+      var add = function(k, val){ var i = document.createElement('input'); i.type = 'hidden'; i.name = k; i.value = val; pf.appendChild(i); };
+      fd.forEach(function(val, k){ if(typeof val === 'string') add(k, val); });
+      add('_next', next);
+      photos.forEach(function(p, i){
+        var dt = new DataTransfer();
+        dt.items.add(p.file);
+        var fi = document.createElement('input');
+        fi.type = 'file';
+        fi.name = i === 0 ? 'attachment' : 'attachment' + (i + 1);
+        fi.files = dt.files;
+        pf.appendChild(fi);
+      });
+      try{ sessionStorage.setItem('menca_sent', String(sent + 1)); }catch(err){}
+      remember();
+      track('generate_lead', Object.assign({form_name: 'estimate', transport_type: 'beacon'}, meta));
+      document.body.appendChild(pf);
+      setTimeout(function(){ pf.submit(); }, 350);
+      return;
+    }
+
+    setLoading(true, 'Sending…');
     var xhr = new XMLHttpRequest();
     xhr.open('POST', CONFIG.formEndpoint);
     xhr.setRequestHeader('Accept', 'application/json');
@@ -1078,7 +1176,7 @@ if('IntersectionObserver' in window){
       if(!ok) return fail(xhr.status >= 500 ? 'server' : 'rejected', res && res.message);
       try{ sessionStorage.setItem('menca_sent', String(sent + 1)); }catch(err){}
       track('generate_lead', Object.assign({form_name: 'estimate'}, meta));
-      remember(meta);
+      remember();
       photos.forEach(function(p){ if(p.url) URL.revokeObjectURL(p.url); });
       photos = []; draw(); form.reset(); started = false;
       setLoading(false);
